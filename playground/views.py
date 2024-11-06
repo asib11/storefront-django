@@ -9,9 +9,13 @@ def say_hello(request):
     #     print(product)
     
     #first element gets none
-    exists = Product.objects.filter(pk=0).first()
+    # exists = Product.objects.filter(pk=0).first()
 
     #get boolean
-    exists = Product.objects.filter(pk=0).exists()
+    # exists = Product.objects.filter(pk=0).exists()
 
-    return render(request, 'hello.html', {'name': 'Asib'})
+    # query_set = Product.objects.filter(unit_price__range = (20, 30))
+    # query_set = Product.objects.filter(collections__id__range = (1, 2, 3))
+    query_set = Product.objects.filter(title__icontains = 'coffee') #can filter by string
+
+    return render(request, 'hello.html', {'name': 'Asib', 'products': query_set})
