@@ -1,12 +1,18 @@
 from django.contrib import admin
+from django.db.models import Count
 from . import models
 
 # Register your models here.
 @admin.register(models.Product) # decorator is the best way to register models
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['title', 'unit_price', 'inventory_status', 'collection']
+    list_display = ['title', 'unit_price', 'inventory_status', 'collection_title']
     list_editable = ['unit_price']
     list_per_page = 10
+    list_select_related = ['collection']
+
+    def collection_title(self, product):
+        return product.collection.title
+    collection_title.short_description = 'Collection' # optional- this is the name that will be displayed in the admin panel
 
     @admin.display(ordering='inventory')
     def inventory_status(self, product):
@@ -21,10 +27,24 @@ class CustomerAdmin(admin.ModelAdmin):
     list_per_page = 10
     ordering = ['first_name', 'last_name']
 
-admin.site.register([
-    models.Collection,
-    # models.Customer,
-    # models.Order,
-    # models.Product,
-    # models.Promotion
-])
+@admin.register(models.Order)
+class OrderAdmin(admin.ModelAdmin):
+    list_display = ['id', 'placed_at', 'customer']
+    list_per_page = 10
+    # ordering = ['-placed_at']
+
+@admin.register(models.Collection)
+class CollectionAdmin(admin.ModelAdmin):
+    list_display = ['title', 'products_count']
+    list_per_page = 10
+    ordering = ['title']
+
+    @admin.display(ordering='products_count')
+    def products_count(self, collection):
+        return collection.products_count
+    products_count.short_description = 'Products Count'
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).annotate(
+            products_count=Count('product')
+        )
