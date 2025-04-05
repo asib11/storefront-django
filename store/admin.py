@@ -36,6 +36,7 @@ class ProductAdmin(admin.ModelAdmin):
     list_per_page = 10
     list_select_related = ['collection']
     list_filter = ['collection', 'last_update', InventoryFilter]
+    search_fields = ['title__istartswith', 'collection__title__istartswith'] # __istartswith is case insensitive
     
 
     def collection_title(self, product):
@@ -73,13 +74,21 @@ class CustomerAdmin(admin.ModelAdmin):
             order_count=Count('order')
         )
     
+class OrderItemInline(admin.TabularInline): # another option is admin.StackedInline
+    autocomplete_fields = ['product'] # this will add a search bar to the product field
+    model = models.OrderItem
+    extra = 0 # number of empty forms to display
+    min_num = 1 # minimum number of forms to display
+    max_num = 10 # maximum number of forms to display
+
 
 @admin.register(models.Order)
 class OrderAdmin(admin.ModelAdmin):
     autocomplete_fields = ['customer'] # this will add a search bar to the customer field
     list_display = ['id', 'placed_at', 'customer']
     list_per_page = 10
-    # ordering = ['-placed_at']
+    inlines = [OrderItemInline]
+
 
 @admin.register(models.Collection)
 class CollectionAdmin(admin.ModelAdmin):
