@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import MinValueValidator
 
 
 class Promotion(models.Model):
@@ -21,11 +22,15 @@ class Product(models.Model):
     title = models.CharField(max_length=255)
     slug = models.SlugField()
     description = models.TextField()
-    unit_price = models.DecimalField(max_digits=6, decimal_places=2)
+    unit_price = models.DecimalField(max_digits=6, decimal_places=2, validators=[
+        MinValueValidator(1)])  # minimum price is 1.0
     inventory = models.IntegerField()
     last_update = models.DateTimeField(auto_now=True)
     collection = models.ForeignKey(Collection, on_delete=models.PROTECT)
-    promotions = models.ManyToManyField(Promotion)
+    promotions = models.ManyToManyField(Promotion, blank=True)
+    # blank=True means that this field is optional
+    # null=True means that this field can be null in the database
+    # related_name='+' means that we don't want to create a reverse relation from Promotion to Product
 
     def __str__(self):
         return self.title
