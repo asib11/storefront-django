@@ -1,6 +1,4 @@
 from django.contrib import admin
-from django.contrib.contenttypes.admin import GenericTabularInline
-from tags.models import TaggedItem
 from django.db.models.aggregates import Count
 from django.utils.html import format_html, urlencode
 from django.urls import reverse
@@ -25,10 +23,7 @@ class InventoryFilter(SimpleListFilter):
             return queryset.filter(inventory__gte=10)
         # return queryset
 
-class TagInline(GenericTabularInline):
-    autocomplete_fields = ['tag'] # this will add a search bar to the tag field
-    model = TaggedItem
-    extra = 0
+
 
 # Register your models here.
 @admin.register(models.Product) # decorator is the best way to register models
@@ -38,7 +33,6 @@ class ProductAdmin(admin.ModelAdmin):
         'slug': ['title'] # this will auto populate the slug field based on the title field
     }
     actions = ['clear_inventory']
-    inlines = [TagInline]
     list_display = ['title', 'unit_price', 'inventory_status', 'collection_title']
     list_editable = ['unit_price']
     list_per_page = 10
