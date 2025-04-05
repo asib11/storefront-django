@@ -26,6 +26,10 @@ class InventoryFilter(SimpleListFilter):
 # Register your models here.
 @admin.register(models.Product) # decorator is the best way to register models
 class ProductAdmin(admin.ModelAdmin):
+    autocomplete_fields = ['collection'] # this will add a search bar to the collection field
+    prepopulated_fields = {
+        'slug': ['title'] # this will auto populate the slug field based on the title field
+    }
     actions = ['clear_inventory']
     list_display = ['title', 'unit_price', 'inventory_status', 'collection_title']
     list_editable = ['unit_price']
@@ -72,6 +76,7 @@ class CustomerAdmin(admin.ModelAdmin):
 
 @admin.register(models.Order)
 class OrderAdmin(admin.ModelAdmin):
+    autocomplete_fields = ['customer'] # this will add a search bar to the customer field
     list_display = ['id', 'placed_at', 'customer']
     list_per_page = 10
     # ordering = ['-placed_at']
@@ -80,6 +85,7 @@ class OrderAdmin(admin.ModelAdmin):
 class CollectionAdmin(admin.ModelAdmin):
     list_display = ['title', 'products_count']
     list_per_page = 10
+    search_fields = ['title']
     ordering = ['title']
 
     @admin.display(ordering='products_count')
