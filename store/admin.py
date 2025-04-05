@@ -1,5 +1,7 @@
 from django.contrib import admin
-from django.db.models import Count
+from django.db.models.aggregates import Count
+from django.utils.html import format_html, urlencode
+from django.urls import reverse
 from . import models
 
 # Register your models here.
@@ -26,6 +28,7 @@ class CustomerAdmin(admin.ModelAdmin):
     list_editable = ['membership']
     list_per_page = 10
     ordering = ['first_name', 'last_name']
+    search_fields = ['first_name__istartswith', 'last_name__istartswith'] # __istartswith is case insensitive
 
 @admin.register(models.Order)
 class OrderAdmin(admin.ModelAdmin):
@@ -41,8 +44,11 @@ class CollectionAdmin(admin.ModelAdmin):
 
     @admin.display(ordering='products_count')
     def products_count(self, collection):
-        return collection.products_count
-    products_count.short_description = 'Products Count'
+        url = reverse('admin:store_product_changelist')+ '?'+ urlencode({
+            'collection__id': str(collection.id)
+        })
+        return format_html('<a href={}>{}<a/>',url,collection.products_count)
+
 
     def get_queryset(self, request):
         return super().get_queryset(request).annotate(
