@@ -2,11 +2,13 @@ from rest_framework import serializers
 from decimal import Decimal
 from store.models import Product, Collection
 
+# model serializer
 class CollectionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Collection
         fields = ['id', 'title']
 
+# normal serializer
 # class CollectionSerializer(serializers.Serializer):
 #     id = serializers.IntegerField()
 #     title = serializers.CharField(max_length=255)
@@ -22,6 +24,11 @@ class ProductSerializer(serializers.ModelSerializer):
     
     def claulate_tax(self, product: Product):
         return product.unit_price * Decimal(1.1)
+    
+    collection = serializers.HyperlinkedRelatedField(  # collection = CollectionSerializer() # nested serializer
+    queryset=Collection.objects.all(),
+    view_name='collection-detail',
+    )
   
 
 #normal serializer
