@@ -9,8 +9,8 @@ from .serializers import ProductSerializer
 
 @api_view()
 def product_list(request):
-    products = Product.objects.all()
-    serializer = ProductSerializer(products, many=True)
+    queryset = Product.objects.select_related('collection').all()
+    serializer = ProductSerializer(queryset, many=True, context={'request': request})
     return Response(serializer.data)
 
 #shortcut and rest of the code we will write this format
@@ -29,3 +29,7 @@ def product_detail(request, id):
 #         return Response(serializer.data)
 #     except Product.DoesNotExist:
 #         return Response({'error': 'Product not found'}, status=status.HTTP_404_NOT_FOUND)
+
+@api_view()
+def collection_detail(request, pk):
+    return Response('OK')
