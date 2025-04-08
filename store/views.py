@@ -1,11 +1,12 @@
+from django.db.models import Count
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.filters import SearchFilter
-from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework import status
-from store.filters import ProductFilter
+from .filters import ProductFilter
 from .models import OrderItem, Product, Collection, Review
-from django.db.models import Count
+from .pagination import DefaultPagination
 from .serializers import ProductSerializer, CollectionSerializer, ReviewSerializer
 # Create your views here.
 
@@ -13,10 +14,12 @@ from .serializers import ProductSerializer, CollectionSerializer, ReviewSerializ
 class ProductViewSet(ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     # filterset_fields = ['collection_id', 'unit_price']
     filterset_class = ProductFilter
     search_fields = ['title', 'description']
+    ordering_fields = ['unit_price', 'last_update']
+    pagination_class = DefaultPagination
 
     # def get_queryset(self):
     #     queryset = Product.objects.all()
