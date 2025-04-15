@@ -8,7 +8,7 @@ from rest_framework import status
 from .filters import ProductFilter
 from .models import Cart, CartItem, OrderItem, Product, Collection, Review
 from .pagination import DefaultPagination
-from .serializers import AddCartItemSericalizer, CartItemSerializer, CartSerializer, ProductSerializer, CollectionSerializer, ReviewSerializer
+from .serializers import AddCartItemSericalizer, CartItemSerializer, CartSerializer, ProductSerializer, CollectionSerializer, ReviewSerializer, UpdateCartItemSerializer
 # Create your views here.
 
 # viewsets
@@ -66,10 +66,13 @@ class CartViewSet(CreateModelMixin, RetrieveModelMixin,DestroyModelMixin, Generi
     # pagination_class = DefaultPagination
 
 class CartItemViewSet(ModelViewSet):
-    serializer_class = CartItemSerializer
+    http_method_names = ['get', 'post', 'patch', 'delete']
+    
     def get_serializer_class(self):
         if self.request.method == 'POST':
             return AddCartItemSericalizer
+        elif self.request.method == 'PATCH':
+            return UpdateCartItemSerializer
         return CartItemSerializer
 
     def get_serializer_context(self):
