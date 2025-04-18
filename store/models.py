@@ -70,6 +70,9 @@ class Customer(models.Model):
         return f'{self.user.first_name} {self.user.last_name}'
     class Meta:
         ordering = ['user__first_name', 'user__last_name']
+        permissions = [
+            ('view_history', 'Can view history'),
+        ]
 
 
 class Order(models.Model):
