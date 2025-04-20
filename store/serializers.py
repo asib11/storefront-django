@@ -140,6 +140,21 @@ class OrderSerializer(serializers.ModelSerializer):
         model = Order
         fields = ['id', 'placed_at', 'payment_status', 'customer', 'items']
 
+class UpdateOrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        fields = ['payment_status']
+
+    def validate_payment_status(self, value):
+        if value not in Order.PaymentStatus:
+            raise serializers.ValidationError('Invalid payment status')
+        return value
+
+    def update(self, instance, validated_data):
+        instance.payment_status = validated_data['payment_status']
+        instance.save()
+        return instance
+
 class CreateOrderSerializer(serializers.Serializer):
     cart_id = serializers.UUIDField()
 
