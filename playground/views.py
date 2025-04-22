@@ -2,10 +2,25 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.db.models import Q, F
 from store.models import Product, OrderItem
+from django.core.mail import send_mail, mail_admins, BadHeaderError
 
 
 
 def say_hello(request):
+    try:
+        mail_admins(
+            subject='Hello from Django',
+            message='This is a test email sent from Django.',
+            html_message='<h1>Hello from Django</h1>',
+        )
+    except BadHeaderError:
+        return HttpResponse('Invalid header found.')
+    return render(request, 'hello.html', {'name': 'Asib'})
+
+
+
+
+
     # query_set = Product.objects.all()
     # for product in query_set:
     #     print(product)
@@ -45,5 +60,5 @@ def say_hello(request):
 
     #selecting field to query
     # select product that has been ordered and sort them by title
-    query_set = Product.objects.filter(id__in = OrderItem.objects.values('product_id').distinct() ).order_by('title')
-    return render(request, 'hello.html', {'name': 'Asib', 'products':list(query_set) })
+    # query_set = Product.objects.filter(id__in = OrderItem.objects.values('product_id').distinct() ).order_by('title')
+    # return render(request, 'hello.html', {'name': 'Asib', 'products':list(query_set) })
