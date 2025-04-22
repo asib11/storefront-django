@@ -3,25 +3,35 @@ from django.http import HttpResponse
 from django.db.models import Q, F
 from store.models import Product, OrderItem
 from django.core.mail import send_mail, mail_admins,EmailMessage, BadHeaderError
+from templated_mail.mail import BaseEmailMessage
 
 
 
 def say_hello(request):
     try:
+        message = BaseEmailMessage(
+            template_name='emails/hello.html',
+            context={'name': 'Asib'},
+ 
+        )
+        message.send(['utsho@asib.com'])
+
         # mail_admins(
         #     subject='Hello from Django',
         #     message='This is a test email sent from Django.',
         #     html_message='<h1>Hello from Django</h1>',
         # )
-        message = EmailMessage(
-            subject='Hello from Django',
-            body='This is a test email sent from Django.',
-            from_email='info@asib.com',
-            to=['tanveer@asib.com'],
-        )
-        message.attach_file('playground/static/images/cow.png')
-        message.send()
-        
+
+
+        # message = EmailMessage(
+        #     subject='Hello from Django',
+        #     body='This is a test email sent from Django.',
+        #     from_email='info@asib.com',
+        #     to=['tanveer@asib.com'],
+        # )
+        # message.attach_file('playground/static/images/cow.png')
+        # message.send()
+
     except BadHeaderError:
         return HttpResponse('Invalid header found.')
     return render(request, 'hello.html', {'name': 'Asib'})
