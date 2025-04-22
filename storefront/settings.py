@@ -175,3 +175,13 @@ DJOSER= {
 
     }
 }
+
+# Email settings
+# https://docs.djangoproject.com/en/3.2/topics/email/
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'localhost'
+EMAIL_PORT = 2525
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
+DEFAULT_FROM_EMAIL = 'from@asib.com'
