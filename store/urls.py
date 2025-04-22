@@ -12,9 +12,11 @@ router.register('orders', views.OrderViewSet, basename='orders')
 # Nested router
 product_router = routers.NestedDefaultRouter(router, 'products', lookup='product')
 product_router.register('reviews', views.ReviewViewSet, basename='product-reviews')
+product_router.register('images', views.ProductImageViewSet, basename='product-images')
 
 carItem_router = routers.NestedDefaultRouter(router, 'carts', lookup='cart')
 carItem_router.register('items', views.CartItemViewSet, basename='cart-items')
+
 
 urlpatterns = router.urls + product_router.urls +carItem_router.urls
 

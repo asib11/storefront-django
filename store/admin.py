@@ -23,6 +23,14 @@ class InventoryFilter(SimpleListFilter):
             return queryset.filter(inventory__gte=10)
         # return queryset
 
+class ProductImageInline(admin.TabularInline):
+    model = models.ProductImage
+    readonly_fields = ['thumbnail']
+
+    def thumbnail(self, instance):
+        if instance.image.name != '':
+            return format_html(f'<img src="{instance.image.url}" width="50" height="50" class="thumbnail"/>')
+        return ''
 
 
 # Register your models here.
@@ -33,6 +41,7 @@ class ProductAdmin(admin.ModelAdmin):
         'slug': ['title'] # this will auto populate the slug field based on the title field
     }
     actions = ['clear_inventory']
+    inlines = [ProductImageInline]
     list_display = ['title', 'unit_price', 'inventory_status', 'collection_title']
     list_editable = ['unit_price']
     list_per_page = 10
@@ -55,6 +64,12 @@ class ProductAdmin(admin.ModelAdmin):
     def clear_inventory(self, request, queryset):
         updated_count = queryset.update(inventory=0)
         self.message_user(request, f'{updated_count} products updated')
+
+    class Media:
+        css = {
+            'all': ('store/styles.css',) # this will add the styles.css file to the admin panel
+        }
+
 
 @admin.register(models.Customer)
 class CustomerAdmin(admin.ModelAdmin):

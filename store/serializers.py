@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.db import transaction
 from decimal import Decimal
-from store.models import Cart, CartItem, Customer, Order, OrderItem, Product, Collection, Review
+from store.models import Cart, CartItem, Customer, Order, OrderItem, Product, Collection, ProductImage, Review
 from .signals import order_created
 
 # model serializer
@@ -17,12 +17,21 @@ class CollectionSerializer(serializers.ModelSerializer):
 #     id = serializers.IntegerField()
 #     title = serializers.CharField(max_length=255)
 
+class ProductImageSrializer(serializers.ModelSerializer):
+    def create(self, validated_data):
+        product_id = self.context['product_id']
+        return ProductImage.objects.create(product_id=product_id, **validated_data)
+    
+    class Meta:
+        model = ProductImage
+        fields = ['id', 'image'] # image is the name of the field in the through model
 
 # model serializer
 class ProductSerializer(serializers.ModelSerializer):
+    images = ProductImageSrializer(many=True, read_only=True) # nested serializer
     class Meta:
         model = Product
-        fields = ['id', 'title', 'description','slug', 'inventory', 'unit_price', 'price_with_tax', 'collection']
+        fields = ['id', 'title', 'description','slug', 'inventory', 'unit_price', 'price_with_tax', 'collection', 'images']
 
     price_with_tax = serializers.SerializerMethodField(method_name='claulate_tax') #custom sericalizer method
     
@@ -178,3 +187,4 @@ class CreateOrderSerializer(serializers.Serializer):
 
             order_created.send_robust(self.__class__, order=order)
             return order
+        
