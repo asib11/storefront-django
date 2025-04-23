@@ -187,3 +187,5 @@ EMAIL_HOST_PASSWORD = ''
 DEFAULT_FROM_EMAIL = 'from@asib.com'
 
 ADMINS = [('Asib', 'admin@asib.com')]
+
+CELERY_BROKER_URL = 'redis://localhost:6379/1'
