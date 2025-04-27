@@ -4,17 +4,18 @@ from django.db.models import Q, F
 from store.models import Product, OrderItem
 from django.core.mail import send_mail, mail_admins,EmailMessage, BadHeaderError
 from templated_mail.mail import BaseEmailMessage
+from .tasks import notify_customer
 
 
 
 def say_hello(request):
-    try:
-        message = BaseEmailMessage(
-            template_name='emails/hello.html',
-            context={'name': 'Asib'},
+    # try:
+    #     message = BaseEmailMessage(
+    #         template_name='emails/hello.html',
+    #         context={'name': 'Asib'},
  
-        )
-        message.send(['utsho@asib.com'])
+    #     )
+    #     message.send(['utsho@asib.com'])
 
         # mail_admins(
         #     subject='Hello from Django',
@@ -32,8 +33,9 @@ def say_hello(request):
         # message.attach_file('playground/static/images/cow.png')
         # message.send()
 
-    except BadHeaderError:
-        return HttpResponse('Invalid header found.')
+    # except BadHeaderError:
+    #     return HttpResponse('Invalid header found.')
+    notify_customer.delay('Hello from Django')
     return render(request, 'hello.html', {'name': 'Asib'})
 
 
