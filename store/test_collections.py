@@ -4,6 +4,7 @@ import pytest
 
 @pytest.mark.django_db
 class TestCreateCollections:
+    # @pytest.mark.skip #this test is skipped for now
     def test_if_user_is_anonymous_retrun_401(self):
         client = APIClient()
         response = client.post('/store/collections/', {
