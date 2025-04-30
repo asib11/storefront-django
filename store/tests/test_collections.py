@@ -15,8 +15,8 @@ class TestCreateCollections:
         response = create_collection({'title': 'a',})
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
-    def test_if_user_is_not_authenticate_retrun_403(self, api_client, create_collection):
-        api_client.force_authenticate(user={})
+    def test_if_user_is_not_authenticate_retrun_403(self, authenticate, create_collection):
+        authenticate()
 
         response = create_collection({'title': 'a',})
 
