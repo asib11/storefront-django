@@ -27,3 +27,7 @@ class WebsiteUser(HttpUser):
     def on_start(self):  # This method is called when a simulated user starts (lifecycle hook)
         response = self.client.post('/store/carts/')
         self.cart_id = response.json()["id"]
+
+    def view_hello(self):
+        print('view hello')
+        self.client.get('/playground/hello/', name='/playground/hello')
