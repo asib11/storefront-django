@@ -16,7 +16,7 @@ class helloView(APIView):
     def get(self, request):
         response = requests.get('https://httpbin.org/delay/2')
         data = response.json()
-        return render(request, 'hello.html', {'name': data})
+        return render(request, 'hello.html', {'name': 'Asib'})
 
 #function based view
 # @cache_page(60 * 5)  # Cache the view for 5 minutes
