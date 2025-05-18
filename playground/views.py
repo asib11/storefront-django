@@ -1,3 +1,4 @@
+from django.core.cache import cache
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.db.models import Q, F
@@ -10,8 +11,12 @@ import requests
 
 
 def say_hello(request):
-    requests.get('https://httpbin.org/delay/2')
-    return render(request, 'hello.html', {'name': 'Asib'})
+    key = 'httpbin_request'
+    if cache.get(key) is None:
+        response = requests.get('https://httpbin.org/delay/2')
+        data = response.json()
+        cache.set(key, data)
+    return render(request, 'hello.html', {'name': cache.get(key)})
     # try:
     #     message = BaseEmailMessage(
     #         template_name='emails/hello.html',
