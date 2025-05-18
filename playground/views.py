@@ -5,10 +5,13 @@ from store.models import Product, OrderItem
 from django.core.mail import send_mail, mail_admins,EmailMessage, BadHeaderError
 from templated_mail.mail import BaseEmailMessage
 from .tasks import notify_customer
+import requests
 
 
 
 def say_hello(request):
+    requests.get('https://httpbin.org/delay/2')
+    return render(request, 'hello.html', {'name': 'Asib'})
     # try:
     #     message = BaseEmailMessage(
     #         template_name='emails/hello.html',
@@ -35,8 +38,8 @@ def say_hello(request):
 
     # except BadHeaderError:
     #     return HttpResponse('Invalid header found.')
-    notify_customer.delay('Hello from Django')
-    return render(request, 'hello.html', {'name': 'Asib'})
+    # notify_customer.delay('Hello from Django')
+    # return render(request, 'hello.html', {'name': 'Asib'})
 
 
 
