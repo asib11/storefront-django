@@ -1,22 +1,32 @@
 from django.core.cache import cache
 from django.shortcuts import render
-from django.http import HttpResponse
-from django.db.models import Q, F
-from store.models import Product, OrderItem
-from django.core.mail import send_mail, mail_admins,EmailMessage, BadHeaderError
-from templated_mail.mail import BaseEmailMessage
-from .tasks import notify_customer
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
+# from django.http import HttpResponse
+# from django.db.models import Q, F
+# from store.models import Product, OrderItem
+# from django.core.mail import send_mail, mail_admins,EmailMessage, BadHeaderError
+# from templated_mail.mail import BaseEmailMessage
+# from .tasks import notify_customer
 import requests
+from rest_framework.views import APIView
 
-
-
-def say_hello(request):
-    key = 'httpbin_request'
-    if cache.get(key) is None:
+class helloView(APIView):
+    @method_decorator(cache_page(60 * 5))  # Cache the view for 5 minutes
+    def get(self, request):
         response = requests.get('https://httpbin.org/delay/2')
         data = response.json()
-        cache.set(key, data)
-    return render(request, 'hello.html', {'name': cache.get(key)})
+        return render(request, 'hello.html', {'name': data})
+
+#function based view
+# @cache_page(60 * 5)  # Cache the view for 5 minutes
+# def say_hello(request):
+#     response = requests.get('https://httpbin.org/delay/2')
+#     data = response.json()
+
+#     return render(request, 'hello.html', {'name': data})
+
+
     # try:
     #     message = BaseEmailMessage(
     #         template_name='emails/hello.html',
