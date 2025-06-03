@@ -230,15 +230,15 @@ LOGGING = {
         }
     },
     'loggers': {
-        'django': {
+        '': {
             'handlers': ['console', 'file'],
-            'level': 'DEBUG',
-            'propagate': True,
-        },
-        'storefront': {
-            'handlers': ['console', 'file'],
-            'level': 'DEBUG',
-            'propagate': True,
-        },
-    }
+            'lavel': os.environ.get('DJANGO_LOG_LEVEL', 'INFO')
+        }
+    },
+    'formatters': {
+        'verbose': {
+            'format': '{asctime} ({levelname})-{name}-{message}',
+            'style': '{',
+        }
+    }    
 }
