@@ -228,5 +228,17 @@ LOGGING = {
             'class': 'logging.FileHandler',
             'filename': 'general.log'
         }
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'storefront': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
     }
 }
