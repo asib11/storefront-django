@@ -1,21 +1,32 @@
 from django.core.cache import cache
 from django.shortcuts import render
-from django.utils.decorators import method_decorator
-from django.views.decorators.cache import cache_page
+# from django.utils.decorators import method_decorator
+# from django.views.decorators.cache import cache_page
+
 # from django.http import HttpResponse
 # from django.db.models import Q, F
 # from store.models import Product, OrderItem
 # from django.core.mail import send_mail, mail_admins,EmailMessage, BadHeaderError
 # from templated_mail.mail import BaseEmailMessage
 # from .tasks import notify_customer
+import logging
 import requests
 from rest_framework.views import APIView
 
+
+logger = logging.getLogger(__name__)
+
 class helloView(APIView):
-    @method_decorator(cache_page(60 * 5))  # Cache the view for 5 minutes
+    # @method_decorator(cache_page(60 * 5))  # Cache the view for 5 minutes
     def get(self, request):
-        response = requests.get('https://httpbin.org/delay/2')
-        data = response.json()
+        try:
+            logger.info('Calling httpbin')
+            response = requests.get('https://httpbin.org/delay/2')
+            logger.info('Response from httpbin received')
+            data = response.json()
+        except requests.ConnectionError as e:
+            logger.critical(f'httpbin is offline')
+            
         return render(request, 'hello.html', {'name': 'Asib'})
 
 #function based view
