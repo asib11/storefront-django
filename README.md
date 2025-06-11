@@ -206,7 +206,7 @@ SMTP settings for development:
 
 1. Set DEBUG=False in production
 2. Configure proper ALLOWED_HOSTS
-3. Use proper SECRET_KEY
+3. Use proper [SECRET_KEY](https://djecrety.ir/)
 4. Set up proper database credentials
 5. Configure proper email settings
 6. Set up static files with WhiteNoise
