@@ -44,34 +44,37 @@ cd storefront-django
 ```
 pipenv install
 ```
+3. For Development run 
+```
+pipenv shell
+```
 
-3. Set up the MySQL database:
+4. Set up the MySQL database:
 ```
 mysql -u root -p
 CREATE DATABASE storefront;
 ```
+5. Populates the database with seed.sql
+```
+python manage.py seed_db
+```
 
-4. Configure environment variables:
+6. Configure environment variables:
 ```
 SECRET_KEY=your-secret-key
 DEBUG=True
 DJANGO_LOG_LEVEL=INFO
 ```
 
-5. Database Migrations:
+7. Database Migrations:
 ```
 python manage.py makemigrations
 python manage.py migrate
 ```
 
-6. Create a superuser:
+8. Create a superuser:
 ```
 python manage.py createsuperuser
-```
-
-## For Development run 
-```
-pipenv shell
 ```
 
 ## Development Server
