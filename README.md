@@ -20,7 +20,7 @@ A feature-rich backend built and cover all of Django and Django REST Framework u
 
 - Django 5.2.2
 - Django REST Framework 3.16.0
-- MySQL Database
+- MySQL/POSTGRESQL Database
 - Redis for caching and Celery broker
 - Celery for async tasks
 - JWT Authentication
@@ -29,7 +29,7 @@ A feature-rich backend built and cover all of Django and Django REST Framework u
 ## Prerequisites
 
 - Python 3.x
-- MySQL
+- MySQL/POSTGRESQL
 - Redis Server
 
 ## Installation
@@ -64,6 +64,7 @@ python manage.py seed_db
 SECRET_KEY=your-secret-key
 DEBUG=True
 DJANGO_LOG_LEVEL=INFO
+DJANGO_SETTINGS_MODULE=storefront.settings.prod(for production)
 ```
 
 7. Database Migrations:
@@ -182,24 +183,24 @@ SMTP settings for development:
 - Port: 2525
 - Default sender: from@asib.com
 
-## 🐛 Debugging
+## Debugging
 
 1. Django Debug Toolbar
 2. Logging Configuration
 3. Error Tracking
 
-## 🔧 Maintenance
+## Maintenance
 
 1. Database backups
 2. Cache invalidation
 3. Session cleanup
 4. Media files management
 
-## 📊 Monitoring Tools
+## Monitoring Tools
 
 1. Celery Flower
 2. Redis Commander
-3. MySQL Workbench
+3. MySQL Workbench/ NEON
 
 ## Deployment
 
