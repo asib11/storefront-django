@@ -49,7 +49,7 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    'whitemoise.middleware.WhiteNoiseMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -58,10 +58,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# if DEBUG:
-#     MIDDLEWARE += [
-#         'silk.middleware.SilkyMiddleware',
-#     ]
 
 INTERNAL_IPS = [
     # ...
@@ -178,7 +174,7 @@ DEFAULT_FROM_EMAIL = 'from@asib.com'
 
 ADMINS = [('Asib', 'admin@asib.com')]
 
-CELERY_BROKER_URL = 'redis://localhost:6379/1'
+
 CELERY_BEAT_SCHEDULE = {
     'notify_customer': {
         'task': 'playground.tasks.notify_customer',
@@ -187,16 +183,6 @@ CELERY_BEAT_SCHEDULE = {
     },
 }
 
-CACHES = {
-    "default": {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379/5",
-        "TIMEOUT": 60 * 10,
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient",
-        }
-    }
-}
 
 LOGGING = {
     'version': 1,

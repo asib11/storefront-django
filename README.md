@@ -58,14 +58,20 @@ DEBUG=True
 DJANGO_LOG_LEVEL=INFO
 ```
 
-5. Run migrations:
+5. Database Migrations:
 ```
+python manage.py makemigrations
 python manage.py migrate
 ```
 
 6. Create a superuser:
 ```
 python manage.py createsuperuser
+```
+
+## For Development run 
+```
+pipenv shell
 ```
 
 ## Development Server
@@ -96,11 +102,50 @@ celery -A storefront beat --loglevel=info
 
 ## API Endpoints
 
-- Authentication: `/auth/`
-- Store API: `/store/`
-- Product management: `/store/products/`
-- Cart operations: `/store/carts/`
-- Order management: `/store/orders/`
+### Authentication
+- `POST /auth/jwt/create/` - Get JWT token
+- `POST /auth/jwt/refresh/` - Refresh JWT token
+- `POST /auth/users/` - Register new user
+- `GET /auth/users/me/` - Get current user details
+
+### Products
+- `GET /store/products/` - List all products
+- `POST /store/products/` - Create a product
+- `GET /store/products/{id}/` - Get product details
+- `PUT /store/products/{id}/` - Update product
+- `DELETE /store/products/{id}/` - Delete product
+- `GET /store/products/{id}/reviews/` - Get product reviews
+
+### Collections
+- `GET /store/collections/` - List all collections
+- `POST /store/collections/` - Create collection
+- `GET /store/collections/{id}/` - Get collection details
+- `PUT /store/collections/{id}/` - Update collection
+- `DELETE /store/collections/{id}/` - Delete collection
+
+### Cart
+- `POST /store/carts/` - Create cart
+- `GET /store/carts/{id}/` - Get cart details
+- `POST /store/carts/{id}/items/` - Add item to cart
+- `DELETE /store/carts/{id}/` - Delete cart
+- `PATCH /store/carts/{id}/items/{id}/` - Update cart item
+- `DELETE /store/carts/{id}/items/{id}/` - Remove cart item
+
+### Orders
+- `GET /store/orders/` - List user orders
+- `POST /store/orders/` - Create order
+- `GET /store/orders/{id}/` - Get order details
+- `PATCH /store/orders/{id}/` - Update order
+
+### Customers
+- `GET /store/customers/` - List customers
+- `GET /store/customers/me/` - Get current customer
+- `PUT /store/customers/me/` - Update customer profile
+
+### Reviews
+- `GET /store/products/{id}/reviews/` - List product reviews
+- `POST /store/products/{id}/reviews/` - Create review
+- `DELETE /store/products/{id}/reviews/{id}/` - Delete review
 
 ## Testing
 
@@ -133,6 +178,25 @@ SMTP settings for development:
 - Host: localhost
 - Port: 2525
 - Default sender: from@asib.com
+
+## 🐛 Debugging
+
+1. Django Debug Toolbar
+2. Logging Configuration
+3. Error Tracking
+
+## 🔧 Maintenance
+
+1. Database backups
+2. Cache invalidation
+3. Session cleanup
+4. Media files management
+
+## 📊 Monitoring Tools
+
+1. Celery Flower
+2. Redis Commander
+3. MySQL Workbench
 
 ## Deployment
 
